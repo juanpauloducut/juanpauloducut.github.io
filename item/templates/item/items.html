@@ -1,0 +1,61 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Items{% endblock %}
+
+{% block content %}
+    <div class="pb-6 grid grid-cols-4 gap-4">
+        <div class="col-span-1 bg-gray-100">
+            <form method="get" action="{% url 'item:items' %}">
+                <input name="query" class="w-full py-4 px-6 border rounded-xl" type="text" value="{{ query }}" placeholder="Find your desired items here">
+                <button class="mt-2 py-4 px-8 text-lg bg-teal-500 text-white rounded-xl">Search</button>
+            </form>
+            <hr class="my-6">
+            <p class="font-semibold">Categories</p>
+            <ul>
+                {% for category in categories %}
+                    <li class="py-2 px-2 rounded-xl{% if category.id == category.id %} bg-gray-200 {% endif %}">
+                        <a href="{% url 'item:items' %}?query={{ query }}&category={{ category.id }}">{{ category.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            <hr class="my-6">
+            
+            <ul>
+                <li>
+                    <a href="{% url 'item:items' %}" class="mt-2 py-4 px-8 inline-block bg-yellow-500 text-lg rounded-xl text-white">Clear filters</a>
+                </li>
+            </ul>
+        </div>
+        <div class="grid grid-flow-row grid-cols-3 grid-rows-4 gap-4">
+            {% for item in items %}
+            <div class="col-auto">
+                <a href="{% url 'item:detail' item.id %}">
+                    <div style="width: 100%; height: 200px;">
+                        {% if item.image %}
+                            <img src="{{ item.image.url }}" class="rounded-t-xl" style="width: 100%; height: 70%;">
+                        {% else %}
+                            <img src="placeholder_image_url" class="rounded-t-xl" style="width: 100%; height: 70%;">
+                        {% endif %}
+                    </div>
+                    <div class="p-6 bg-white rounded-b-xl" style="height: 30%;">
+                        <h2 class="text-2xl">{{ item.name }}</h2>
+                        <p class="text-gray-500">Price: ${{ item.price }}</p>
+                    </div>
+                </a>
+                {% if request.user == item.created_by %}
+                    <div class="mt-6 p-6 bg-white rounded-xl">
+                         <p class="mt-2 py-4 px-8 inline-block bg-orange-500 text-lg rounded-xl text-white"> This is your item!</p><br>
+                         </div>
+                         {% else %}
+                      <form method="post" action="{% url 'cart:add_to_cart' item.id %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="item_id" value="{{ item.id }}">
+                    <input type="hidden" name="quantity" value="1" min="1">
+                    <button type="submit" class="mt-2 py-4 px-8 inline-block bg-teal-500 text-lg rounded-xl text-white">Add To Cart</button>
+                </form>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

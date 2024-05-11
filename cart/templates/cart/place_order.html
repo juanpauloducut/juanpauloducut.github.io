@@ -1,0 +1,21 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Place Order{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-4">Place Order</h1>
+  
+  <div class="mb-8">
+    <h2 class="text-xl font-semibold mb-2">Shipping Address</h2>
+    <p>{{ shipping_address }}</p>
+    <li class="mb-2">Total Price: ${{ total_price }}</li>
+  </div>
+
+  <!-- Confirm Order Button -->
+  <form action="{% url 'cart:thank_you' %}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Confirm Order</button>
+  </form>
+</div>
+{% endblock %}

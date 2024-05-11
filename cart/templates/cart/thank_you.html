@@ -1,0 +1,15 @@
+{% extends 'core/base.html' %}
+
+{% block title %}THANK YOU!{% endblock %}
+
+{% block content %}
+  <h1>Thank You for Your Order!</h1>
+  <br>
+  <br>
+  
+  <!-- Add any additional content you want to display on the thank you page -->
+  
+  <!-- Button to go to homepage -->
+  <a href="{% url 'core:index' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">Go to Homepage</a>
+  
+{% endblock %}
